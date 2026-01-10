@@ -1,7 +1,10 @@
-from dotenv import load_dotenv
-load_dotenv()
-
 import os
+try:
+    from dotenv import load_dotenv
+    load_dotenv()
+except ImportError:
+    # dotenv is optional, continue without it
+    pass
 from flask import Flask, render_template, request, jsonify
 from pathlib import Path
 

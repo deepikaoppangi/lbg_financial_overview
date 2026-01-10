@@ -1,0 +1,99 @@
+<html><head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Lloyds Finance Snapshot POC</title>
+  <link rel="stylesheet" href="/static/app.css">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+  <div class="app">
+    <header class="topbar">
+      <div class="brand">Lloyds Intelligence</div>
+      <div class="tabs">
+        <button class="tab active" data-period="6M">6M</button>
+        <button class="tab" data-period="1Y">1Y</button>
+        <button class="tab" data-period="3Y">3Y</button>
+        <button class="tab" data-period="5Y">5Y</button>
+      </div>
+    </header>
+
+    <main class="grid">
+      <!-- LEFT -->
+      <section class="card" id="expensesCard">
+        <div class="cardTitle">Expenses by category</div>
+        <div class="subtle" id="expTotal"></div>
+        <div class="list" id="expensesList"></div>
+      </section>
+
+      <!-- CENTER -->
+      <section class="card" id="centerCard">
+        <div class="cardTitle">Earning • Spending • Saving</div>
+
+        <div class="miniGrid">
+          <div class="pill">
+            <div class="pillLabel">Salary (monthly)</div>
+            <div class="pillValue" id="salary"></div>
+          </div>
+          <div class="pill">
+            <div class="pillLabel">Estimated savings</div>
+            <div class="pillValue" id="savings"></div>
+          </div>
+        </div>
+
+        <div class="chartBox">
+          <div class="chartTitle" id="flowTitle">Flow (Income vs Expense vs Savings)</div>
+          <canvas id="flowChart" height="140"></canvas>
+        </div>
+
+        <div class="chartBox">
+          <div class="chartTitle">Wealth trajectory (index points)</div>
+          <canvas id="wealthChart" height="120"></canvas>
+        </div>
+
+        <div class="simBox">
+          <div class="simTitle">Scenario simulation</div>
+          <div class="simRow">
+            <input id="question" placeholder="Try: I want to retire at 65 / holiday budget">
+            <button id="simulateBtn">SIMULATE</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- RIGHT -->
+      <section class="card" id="metricsCard">
+        <div class="cardTitle">Resilience &amp; liquidity</div>
+
+        <div class="metric">
+          <div class="metricLabel">Resilience</div>
+          <div class="bar"><div class="barFill" id="resBar"></div></div>
+          <div class="metricValue" id="res"></div>
+        </div>
+
+        <div class="metric">
+          <div class="metricLabel">Liquidity</div>
+          <div class="bar"><div class="barFill" id="liqBar"></div></div>
+          <div class="metricValue" id="liq"></div>
+        </div>
+
+        <!-- Insight Summary (green border) -->
+        <div class="summaryBox insightBox">
+          <div class="summaryTitle">Insight summary</div>
+          <div class="summaryHeadline" id="sumHeadline"></div>
+          <ul class="summaryBullets" id="sumBullets"></ul>
+          <div class="summaryNote" id="sumNote"></div>
+        </div>
+
+        <!-- Simulation Result (RIGHT PANEL) -->
+        <div class="simulationBox" id="simulationBox">
+          <div class="simulationTitle">Simulation result</div>
+          <div class="simulationHeading" id="simHeading"></div>
+          <div class="simulationBody" id="simBody"></div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <script src="/static/app.js"></script>
+
+
+</body></html>

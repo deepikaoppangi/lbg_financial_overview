@@ -1,0 +1,315 @@
+:root{
+  --bg:#0b1220;
+  --card:#111a2e;
+  --text:#e7ecff;
+  --muted:#9fb0d0;
+  --line:#223055;
+  --accent:#35d0a2;
+  --warn:#f6c04a;
+}
+
+*{box-sizing:border-box}
+html,body{height:100%}
+body{
+  margin:0;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+  background:var(--bg);
+  color:var(--text);
+  overflow:hidden; /* NO PAGE SCROLL */
+}
+
+.app{height:100vh; display:flex; flex-direction:column}
+
+.topbar{
+  height:64px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding:0 16px;
+  border-bottom:1px solid var(--line);
+}
+
+.brand{font-weight:700; letter-spacing:.2px}
+
+.tabs{display:flex; gap:8px}
+.tab{
+  border:1px solid var(--line);
+  background:transparent;
+  color:var(--text);
+  padding:8px 10px;
+  border-radius:10px;
+  cursor:pointer;
+  font-weight:600;
+}
+.tab.active{border-color:var(--accent); box-shadow:0 0 0 1px rgba(53,208,162,.25) inset}
+
+.grid{
+  height:calc(100vh - 64px);
+  display:grid;
+  grid-template-columns: 1.1fr 1.8fr 1.1fr;
+  gap:12px;
+  padding:12px;
+}
+
+.card{
+  background:var(--card);
+  border:1px solid var(--line);
+  border-radius:16px;
+  padding:14px;
+  overflow:hidden;
+  box-shadow: 0 10px 30px rgba(0,0,0,.25);
+}
+
+.cardTitle{font-weight:800; margin-bottom:8px}
+.subtle{color:var(--muted); font-size:12px; margin-bottom:8px}
+
+.list{
+  height:calc(100% - 60px);
+  overflow:auto; /* internal scroll allowed */
+  padding-right:6px;
+}
+.row{
+  padding:10px;
+  border:1px solid var(--line);
+  border-radius:12px;
+  margin-bottom:10px;
+}
+.rowTop{display:flex; justify-content:space-between; font-weight:700}
+.rowSub{display:flex; justify-content:space-between; margin-top:6px; color:var(--muted); font-size:12px}
+.miniBar{height:6px; background:#0f1730; border:1px solid var(--line); border-radius:999px; margin-top:8px; overflow:hidden}
+.miniFill{height:100%}
+
+.miniGrid{display:grid; grid-template-columns:1fr 1fr; gap:10px; margin:8px 0 12px}
+.pill{
+  border:1px solid var(--line);
+  border-radius:14px;
+  padding:10px;
+}
+.pillLabel{color:var(--muted); font-size:12px}
+.pillValue{font-size:18px; font-weight:900; margin-top:6px}
+
+.chartBox{
+  border:1px solid var(--line);
+  border-radius:14px;
+  padding:12px;
+  margin-bottom:12px;
+}
+.chartTitle{color:var(--muted); font-size:12px; margin-bottom:10px}
+
+.spark{
+  height:120px;
+  display:flex;
+  gap:6px;
+  align-items:flex-end;
+}
+.sparkBar{
+  flex:1;
+  border:1px solid var(--line);
+  border-radius:8px;
+  background:#0f1730;
+  overflow:hidden;
+}
+.sparkFill{width:100%;}
+
+.sparkLabels{
+  display:flex;
+  gap:6px;
+  margin-top:8px;
+  color:var(--muted);
+  font-size:11px;
+}
+.sparkLabels span{flex:1; text-align:center; white-space:nowrap; overflow:hidden; text-overflow:ellipsis}
+
+.simBox{
+  border:1px solid var(--line);
+  border-radius:14px;
+  padding:12px;
+}
+.simTitle{font-weight:800; margin-bottom:10px}
+.simRow{display:flex; gap:10px}
+input{
+  flex:1;
+  background:#0f1730;
+  border:1px solid var(--line);
+  border-radius:12px;
+  padding:10px 12px;
+  color:var(--text);
+  outline:none;
+}
+button#simulateBtn{
+  background:var(--accent);
+  border:0;
+  border-radius:12px;
+  padding:10px 14px;
+  font-weight:900;
+  cursor:pointer;
+}
+
+.metric{margin-top:10px}
+.metricLabel{color:var(--muted); font-size:12px; margin-bottom:8px}
+.bar{
+  height:10px;
+  background:#0f1730;
+  border:1px solid var(--line);
+  border-radius:999px;
+  overflow:hidden;
+}
+.barFill{height:100%; width:0%}
+.metricValue{margin-top:8px; font-weight:900}
+
+.summaryBox{
+  margin-top:12px;
+  border:1px solid var(--line);
+  border-radius:14px;
+  padding:12px;
+}
+.summaryTitle{color:var(--muted); font-size:12px; margin-bottom:8px}
+.summaryHeadline{font-weight:900; margin-bottom:8px}
+.summaryBullets{margin:0; padding-left:16px; color:var(--text)}
+.summaryBullets li{margin:6px 0}
+.summaryNote{margin-top:10px; color:var(--muted); font-size:11px}
+
+/* --- FIX: ensure charts have height --- */
+.chartBox {
+  height: 260px;          /* critical */
+  display: flex;
+  flex-direction: column;
+}
+
+.chartBox canvas {
+  flex: 1;
+  min-height: 220px;      /* critical */
+}
+
+/* Insight summary highlight (green) */
+.insightBox{
+  border: 2px solid var(--accent) !important;
+}
+
+/* Simulation box styling */
+.simulationTitle{
+  font-weight: 900;
+  color: var(--accent);
+  margin-bottom: 8px;
+}
+
+.simulationHeading{
+  font-weight: 950;
+  margin-bottom: 8px;
+}
+
+.simulationList{
+  margin: 0;
+  padding-left: 18px;
+}
+
+/* Simulation box (right panel) - NOT white */
+.simulationTitle{
+  font-weight: 900;
+  color: var(--accent);
+  margin-bottom: 8px;
+}
+
+.simulationHeading{
+  font-weight: 950;
+  margin-bottom: 8px;
+}
+
+.simulationList{
+  margin: 0;
+  padding-left: 18px;
+}
+
+/* FORCE simulation box to be light green (override any previous definitions) */
+
+
+/* --- Simulation box (single source of truth) --- */
+#simulationBox{
+  margin-top: 12px;
+  border: 2px solid rgba(0,106,77,.25);
+  border-radius: 14px;
+  padding: 12px;
+  background: #eaf6f1; /* light green */
+}
+
+#simulationBox .simulationTitle{
+  font-weight: 900;
+  color: var(--accent);
+  margin-bottom: 8px;
+}
+
+#simulationBox .simulationHeading{
+  font-weight: 950;
+  margin-bottom: 8px;
+}
+
+#simulationBox .simulationList{
+  margin: 0;
+  padding-left: 18px;
+}
+
+#simulationBox.disabled{
+  opacity: 0.75;
+}
+
+/* FORCE Lloyds-style simulation box (overrides anything earlier) */
+#simulationBox{
+  background: #eaf6f1 !important;   /* light green */
+  border: 2px solid rgba(0,106,77,.25) !important;
+  color: var(--text) !important;
+}
+#simulationBox *{
+  color: var(--text) !important;
+}
+
+/* Make simulation box readable even when disabled */
+#simulationBox.disabled{
+  opacity: 1 !important;
+}
+
+/* ===== DARK THEME OVERRIDE ===== */
+body{
+  background:#0b1f1a !important; /* deep green-black */
+  color:#e6f2ee !important;
+}
+
+/* Cards */
+.card{
+  background:#102a24 !important;
+  border:1px solid rgba(255,255,255,0.08);
+}
+
+/* Titles */
+.cardTitle,
+.simulationTitle,
+.summaryTitle{
+  color:#9fe3c2 !important;
+}
+
+/* Text everywhere */
+body, p, li, div, span, input, button{
+  color:#e6f2ee !important;
+}
+
+/* Inputs */
+input{
+  background:#0f3028 !important;
+  border:1px solid rgba(255,255,255,0.2);
+}
+
+/* Simulation box (right panel) */
+#simulationBox{
+  background:#12362c !important;  /* dark green */
+  border:1px solid rgba(159,227,194,0.4) !important;
+}
+
+/* Insight box */
+.insightBox{
+  background:#0f3028 !important;
+  border:1px solid #2abf88 !important;
+}
+
+/* Charts text */
+canvas{
+  filter:brightness(1.1);
+}

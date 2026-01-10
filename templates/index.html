@@ -1,99 +1,400 @@
-<html><head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>Lloyds Finance Snapshot POC</title>
-  <link rel="stylesheet" href="/static/app.css">
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-</head>
-<body>
-  <div class="app">
-    <header class="topbar">
-      <div class="brand">Lloyds Intelligence</div>
-      <div class="tabs">
-        <button class="tab active" data-period="6M">6M</button>
-        <button class="tab" data-period="1Y">1Y</button>
-        <button class="tab" data-period="3Y">3Y</button>
-        <button class="tab" data-period="5Y">5Y</button>
-      </div>
-    </header>
-
-    <main class="grid">
-      <!-- LEFT -->
-      <section class="card" id="expensesCard">
-        <div class="cardTitle">Expenses by category</div>
-        <div class="subtle" id="expTotal"></div>
-        <div class="list" id="expensesList"></div>
-      </section>
-
-      <!-- CENTER -->
-      <section class="card" id="centerCard">
-        <div class="cardTitle">Earning • Spending • Saving</div>
-
-        <div class="miniGrid">
-          <div class="pill">
-            <div class="pillLabel">Salary (monthly)</div>
-            <div class="pillValue" id="salary"></div>
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>
+      Lloyds Financial Wellness Hub - Your Personal Financial Dashboard
+    </title>
+    <link rel="stylesheet" href="/static/app.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap"
+      rel="stylesheet"
+    />
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2"></script>
+  </head>
+  <body>
+    <div class="app">
+      <!-- Premium Header with Enhanced LBG Branding -->
+      <header class="header">
+        <div class="header-background"></div>
+        <div class="header-content">
+          <div class="header-left">
+            <div class="logo-container">
+              <img
+                src="/static/Lloyds-Banking-Group-logo.webp"
+                alt="Lloyds Banking Group"
+                class="logo"
+              />
+            </div>
+            <div class="brand-info">
+              <h1 class="app-title">Lloyds Financial Wellness Hub</h1>
+              <p class="app-subtitle">Your Personal Financial Dashboard</p>
+            </div>
           </div>
-          <div class="pill">
-            <div class="pillLabel">Estimated savings</div>
-            <div class="pillValue" id="savings"></div>
-          </div>
-        </div>
-
-        <div class="chartBox">
-          <div class="chartTitle" id="flowTitle">Flow (Income vs Expense vs Savings)</div>
-          <canvas id="flowChart" height="140"></canvas>
-        </div>
-
-        <div class="chartBox">
-          <div class="chartTitle">Wealth trajectory (index points)</div>
-          <canvas id="wealthChart" height="120"></canvas>
-        </div>
-
-        <div class="simBox">
-          <div class="simTitle">Scenario simulation</div>
-          <div class="simRow">
-            <input id="question" placeholder="Try: I want to retire at 65 / holiday budget">
-            <button id="simulateBtn">SIMULATE</button>
+          <div class="header-right">
+            <div class="period-selector">
+              <button class="period-btn active" data-period="6M">
+                <span>6M</span>
+              </button>
+              <button class="period-btn" data-period="1Y">
+                <span>1Y</span>
+              </button>
+              <button class="period-btn" data-period="3Y">
+                <span>3Y</span>
+              </button>
+              <button class="period-btn" data-period="5Y">
+                <span>5Y</span>
+              </button>
+            </div>
           </div>
         </div>
-      </section>
+      </header>
 
-      <!-- RIGHT -->
-      <section class="card" id="metricsCard">
-        <div class="cardTitle">Resilience &amp; liquidity</div>
+      <!-- Main Dashboard -->
+      <main class="dashboard">
+        <!-- Hero Metrics Section - Enhanced with Animations -->
+        <section class="hero-metrics">
+          <div class="metric-card hero-primary">
+            <div class="metric-glow"></div>
+            <div class="metric-content">
+              <div class="metric-info">
+                <div class="metric-label">Monthly Income</div>
+                <div class="metric-value" id="salary">€0</div>
+                <div class="metric-trend">
+                  <span class="trend-icon">📈</span>
+                  <span>Steady growth</span>
+                </div>
+              </div>
+              <div class="metric-icon-wrapper">
+                <div class="metric-icon">💰</div>
+              </div>
+            </div>
+          </div>
 
-        <div class="metric">
-          <div class="metricLabel">Resilience</div>
-          <div class="bar"><div class="barFill" id="resBar"></div></div>
-          <div class="metricValue" id="res"></div>
+          <div class="metric-card hero-success">
+            <div class="metric-glow"></div>
+            <div class="metric-content">
+              <div class="metric-info">
+                <div class="metric-label">Estimated Savings</div>
+                <div class="metric-value" id="savings">€0</div>
+                <div class="metric-trend">
+                  <span class="trend-icon">💚</span>
+                  <span>On track</span>
+                </div>
+              </div>
+              <div class="metric-icon-wrapper">
+                <div class="metric-icon">💵</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="metric-card hero-warning">
+            <div class="metric-glow"></div>
+            <div class="metric-content">
+              <div class="metric-info">
+                <div class="metric-label">Monthly Expenses</div>
+                <div class="metric-value" id="expTotal">€0</div>
+                <div class="metric-trend">
+                  <span class="trend-icon">📊</span>
+                  <span>Well managed</span>
+                </div>
+              </div>
+              <div class="metric-icon-wrapper">
+                <div class="metric-icon">📊</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="metric-card hero-info">
+            <div class="metric-glow"></div>
+            <div class="metric-content">
+              <div class="metric-info">
+                <div class="metric-label">Financial Wellness</div>
+                <div class="metric-value" id="wellnessScore">0%</div>
+                <div class="metric-trend">
+                  <span class="trend-icon">🎯</span>
+                  <span>Excellent</span>
+                </div>
+              </div>
+              <div class="metric-icon-wrapper">
+                <div class="metric-icon">🎯</div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Main Content Grid -->
+        <div class="content-grid">
+          <!-- Left Column -->
+          <div class="left-column">
+            <!-- Expense Breakdown Card -->
+            <div class="dashboard-card expenses-card">
+              <div class="card-header">
+                <div class="card-header-content">
+                  <h2 class="card-title">
+                    <span class="card-icon">💳</span>
+                    Expense Breakdown
+                  </h2>
+                  <div class="card-subtitle" id="expTotalSubtitle">
+                    Total monthly expenses
+                  </div>
+                </div>
+              </div>
+              <div class="expenses-list" id="expensesList"></div>
+            </div>
+
+            <!-- Customer Engagement Card -->
+            <div class="dashboard-card engagement-card">
+              <div class="card-header">
+                <div class="card-header-content">
+                  <h2 class="card-title">
+                    <span class="card-icon">📈</span>
+                    Financial Engagement
+                  </h2>
+                  <div class="card-subtitle">Your activity insights</div>
+                </div>
+              </div>
+              <div class="engagement-metrics">
+                <div class="engagement-item">
+                  <div class="engagement-header">
+                    <span class="engagement-label">Savings Rate</span>
+                    <span class="engagement-value" id="savingsRate">0%</span>
+                  </div>
+                  <div class="engagement-bar">
+                    <div class="engagement-fill" id="savingsRateBar"></div>
+                    <div class="engagement-shine"></div>
+                  </div>
+                </div>
+                <div class="engagement-item">
+                  <div class="engagement-header">
+                    <span class="engagement-label">Spending Efficiency</span>
+                    <span class="engagement-value" id="efficiency">0%</span>
+                  </div>
+                  <div class="engagement-bar">
+                    <div class="engagement-fill" id="efficiencyBar"></div>
+                    <div class="engagement-shine"></div>
+                  </div>
+                </div>
+                <div class="engagement-item">
+                  <div class="engagement-header">
+                    <span class="engagement-label">Goal Progress</span>
+                    <span class="engagement-value" id="goalProgress">0%</span>
+                  </div>
+                  <div class="engagement-bar">
+                    <div class="engagement-fill" id="goalProgressBar"></div>
+                    <div class="engagement-shine"></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Customer Satisfaction Radar -->
+            <div class="dashboard-card satisfaction-card">
+              <div class="card-header">
+                <div class="card-header-content">
+                  <h2 class="card-title">
+                    <span class="card-icon">⭐</span>
+                    Financial Satisfaction
+                  </h2>
+                  <div class="card-subtitle">
+                    Your financial confidence score
+                  </div>
+                </div>
+              </div>
+              <div class="chart-container satisfaction-chart">
+                <canvas id="satisfactionChart"></canvas>
+              </div>
+            </div>
+          </div>
+
+          <!-- Center Column -->
+          <div class="center-column">
+            <!-- Financial Flow Chart -->
+            <div class="dashboard-card chart-card flow-card">
+              <div class="card-header">
+                <div class="card-header-content">
+                  <h2 class="card-title" id="flowTitle">
+                    <span class="card-icon">💹</span>
+                    Income vs Expenses vs Savings
+                  </h2>
+                  <div class="chart-legend" id="flowLegend"></div>
+                </div>
+              </div>
+              <div class="chart-container large-chart">
+                <canvas id="flowChart"></canvas>
+              </div>
+            </div>
+
+            <!-- Wealth Trajectory -->
+            <div class="dashboard-card chart-card wealth-card">
+              <div class="card-header">
+                <div class="card-header-content">
+                  <h2 class="card-title">
+                    <span class="card-icon">📊</span>
+                    Wealth Trajectory
+                  </h2>
+                  <div class="card-subtitle">Index points over time</div>
+                </div>
+              </div>
+              <div class="chart-container large-chart">
+                <canvas id="wealthChart"></canvas>
+              </div>
+            </div>
+
+            <!-- Customer Behavior Insights -->
+            <div class="dashboard-card behavior-card">
+              <div class="card-header">
+                <div class="card-header-content">
+                  <h2 class="card-title">
+                    <span class="card-icon">🎯</span>
+                    Spending Behavior Insights
+                  </h2>
+                  <div class="card-subtitle">Category analysis & patterns</div>
+                </div>
+              </div>
+              <div class="chart-container behavior-chart">
+                <canvas id="behaviorChart"></canvas>
+              </div>
+            </div>
+
+            <!-- Customer Experience Trends -->
+            <div class="dashboard-card experience-card">
+              <div class="card-header">
+                <div class="card-header-content">
+                  <h2 class="card-title">
+                    <span class="card-icon">🌟</span>
+                    Financial Experience Trends
+                  </h2>
+                  <div class="card-subtitle">Your journey over time</div>
+                </div>
+              </div>
+              <div class="chart-container experience-chart">
+                <canvas id="experienceChart"></canvas>
+              </div>
+            </div>
+          </div>
+
+          <!-- Right Column -->
+          <div class="right-column">
+            <!-- Financial Health Metrics -->
+            <div class="dashboard-card health-card">
+              <div class="card-header">
+                <div class="card-header-content">
+                  <h2 class="card-title">
+                    <span class="card-icon">❤️</span>
+                    Financial Health
+                  </h2>
+                  <div class="card-subtitle">
+                    Resilience & liquidity metrics
+                  </div>
+                </div>
+              </div>
+              <div class="health-metrics">
+                <div class="health-item">
+                  <div class="health-icon">🛡️</div>
+                  <div class="health-content">
+                    <div class="health-header">
+                      <span class="health-label">Financial Resilience</span>
+                      <span class="health-value" id="res">0%</span>
+                    </div>
+                    <div class="health-bar">
+                      <div class="health-fill" id="resBar"></div>
+                      <div class="health-shine"></div>
+                    </div>
+                    <div class="health-description">
+                      Your ability to handle unexpected expenses
+                    </div>
+                  </div>
+                </div>
+                <div class="health-item">
+                  <div class="health-icon">💧</div>
+                  <div class="health-content">
+                    <div class="health-header">
+                      <span class="health-label">Liquidity Score</span>
+                      <span class="health-value" id="liq">0%</span>
+                    </div>
+                    <div class="health-bar">
+                      <div class="health-fill" id="liqBar"></div>
+                      <div class="health-shine"></div>
+                    </div>
+                    <div class="health-description">
+                      Access to available funds
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- AI Insight Summary -->
+            <div class="dashboard-card insight-card">
+              <div class="card-header">
+                <div class="card-header-content">
+                  <h2 class="card-title">
+                    <span class="card-icon">💡</span>
+                    Insight Summary
+                  </h2>
+                  <div class="card-subtitle">AI-powered financial insights</div>
+                </div>
+              </div>
+              <div class="insight-content">
+                <div class="insight-headline" id="sumHeadline">
+                  Analyzing your financial data...
+                </div>
+                <ul class="insight-bullets" id="sumBullets"></ul>
+                <div class="insight-note" id="sumNote"></div>
+              </div>
+            </div>
+
+            <!-- Scenario Planning -->
+            <div class="dashboard-card simulation-card">
+              <div class="card-header">
+                <div class="card-header-content">
+                  <h2 class="card-title">
+                    <span class="card-icon">🎯</span>
+                    Scenario Planning
+                  </h2>
+                  <div class="card-subtitle">Explore financial scenarios</div>
+                </div>
+              </div>
+              <div class="simulation-input">
+                <input
+                  type="text"
+                  id="question"
+                  placeholder="Try: 'I want to retire at 65' or 'holiday budget planning'"
+                  class="simulation-field"
+                />
+                <button id="simulateBtn" class="simulation-btn">
+                  <span>Simulate</span>
+                  <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                    <path
+                      d="M8 0L9.41 5.59L15 7L9.41 8.41L8 14L6.59 8.41L1 7L6.59 5.59L8 0Z"
+                      fill="currentColor"
+                    />
+                  </svg>
+                </button>
+              </div>
+              <div class="simulation-result" id="simulationBox">
+                <div class="simulation-title">Simulation Result</div>
+                <div class="simulation-heading" id="simHeading">
+                  Ready to explore
+                </div>
+                <div class="simulation-body" id="simBody">
+                  <p class="simulation-placeholder">
+                    Type a scenario question and click Simulate to see
+                    personalized insights.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
+      </main>
+    </div>
 
-        <div class="metric">
-          <div class="metricLabel">Liquidity</div>
-          <div class="bar"><div class="barFill" id="liqBar"></div></div>
-          <div class="metricValue" id="liq"></div>
-        </div>
-
-        <!-- Insight Summary (green border) -->
-        <div class="summaryBox insightBox">
-          <div class="summaryTitle">Insight summary</div>
-          <div class="summaryHeadline" id="sumHeadline"></div>
-          <ul class="summaryBullets" id="sumBullets"></ul>
-          <div class="summaryNote" id="sumNote"></div>
-        </div>
-
-        <!-- Simulation Result (RIGHT PANEL) -->
-        <div class="simulationBox" id="simulationBox">
-          <div class="simulationTitle">Simulation result</div>
-          <div class="simulationHeading" id="simHeading"></div>
-          <div class="simulationBody" id="simBody"></div>
-        </div>
-      </section>
-    </main>
-  </div>
-
-  <script src="/static/app.js"></script>
-
-
-</body></html>
+    <script src="/static/app.js"></script>
+  </body>
+</html>

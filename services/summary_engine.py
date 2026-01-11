@@ -37,11 +37,11 @@ def build_summary(snapshot, question):
         }
 
     # Deterministic base summary
-    headline = f"{period} snapshot: estimated savings €{savings_m:.0f}/month."
+    headline = f"{period} snapshot: estimated savings £{savings_m:.0f}/month."
     bullets = [
-        f"Income: €{salary_m:.0f}/month | Expenses: €{spend_m:.0f}/month",
+        f"Income: £{salary_m:.0f}/month | Expenses: £{spend_m:.0f}/month",
         f"Resilience: {res:.0f}% | Liquidity: {liq:.0f}%",
-        f"Top expense: {snapshot['expenses'][0]['label']} (€{snapshot['expenses'][0]['monthly']:.0f}/month)" if snapshot["expenses"] else "No expense categories loaded."
+        f"Top expense: {snapshot['expenses'][0]['label']} (£{snapshot['expenses'][0]['monthly']:.0f}/month)" if snapshot["expenses"] else "No expense categories loaded."
     ]
 
     # ---- Simulation logic (POC but meaningful) ----
@@ -55,7 +55,7 @@ def build_summary(snapshot, question):
         # spend ceiling: liquidity buffer minus 1 month safety
         safety = 1.0 * spend_m
         ceiling = max(liquidity_buffer - safety, 0)
-        bullets.append(f"Holiday scenario: spend ceiling ≈ €{ceiling:.0f} (keeps ~1 month safety buffer).")
+        bullets.append(f"Holiday scenario: spend ceiling ≈ £{ceiling:.0f} (keeps ~1 month safety buffer).")
 
     if "retire" in q:
         age = _extract_age(q) or 55
@@ -66,7 +66,7 @@ def build_summary(snapshot, question):
         if gap <= 0:
             bullets.append(f"Retire at {age}: savings rate looks strong vs a {int(target_savings_rate*100)}% target (model).")
         else:
-            bullets.append(f"Retire at {age}: needs ~€{gap:.0f}/month extra savings to reach a {int(target_savings_rate*100)}% target (model).")
+            bullets.append(f"Retire at {age}: needs ~£{gap:.0f}/month extra savings to reach a {int(target_savings_rate*100)}% target (model).")
 
     if q and ("holiday" not in q) and ("vacation" not in q) and ("retire" not in q):
         bullets.append("Try: 'retire at 55' or 'holiday budget'.")

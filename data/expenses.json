@@ -1,5 +1,5 @@
 {
-  "currency": "EUR",
+  "currency": "GBP",
   "categories": [
     {"key":"kids","label":"Kids Education","monthly":300},
     {"key":"health","label":"Healthcare","monthly":160},

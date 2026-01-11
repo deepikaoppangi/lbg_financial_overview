@@ -1247,6 +1247,19 @@ async function loadProfiles() {
   }
 }
 
+function updateTitle(profileName) {
+  const titleEl = document.getElementById("appTitle");
+  if (!titleEl) return;
+  
+  // Extract first name from full name (e.g., "David Williams" -> "David")
+  const firstName = profileName ? profileName.split(" ")[0] : "";
+  if (firstName) {
+    titleEl.textContent = `${firstName} Financial Wellbeing`;
+  } else {
+    titleEl.textContent = "Financial Wellbeing";
+  }
+}
+
 function setupProfileSelector() {
   const selector = document.getElementById("profileSelector");
   if (!selector) return;
@@ -1261,6 +1274,8 @@ function setupProfileSelector() {
     option.textContent = profile.name;
     if (profile.id === currentProfile) {
       option.selected = true;
+      // Update title for initial profile
+      updateTitle(profile.name);
     }
     selector.appendChild(option);
   });
@@ -1268,6 +1283,11 @@ function setupProfileSelector() {
   // Add event listener
   selector.addEventListener("change", async (e) => {
     currentProfile = e.target.value;
+    // Find the selected profile and update title
+    const selectedProfile = profiles.find(p => p.id === currentProfile);
+    if (selectedProfile) {
+      updateTitle(selectedProfile.name);
+    }
     await loadSnapshot();
   });
 }

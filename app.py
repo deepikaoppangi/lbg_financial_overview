@@ -5,7 +5,7 @@ import os
 from flask import Flask, render_template, request, jsonify
 from pathlib import Path
 
-from services.data_service import load_time_series, load_expenses
+from services.data_service import load_time_series, load_expenses, get_available_profiles
 from services.finance_engine import build_snapshot
 from services.summary_engine import build_summary
 from services.llm_service import llm_simulation
@@ -19,14 +19,22 @@ def home():
     return render_template("index.html")
 
 
+@app.route("/api/profiles", methods=["GET"])
+def api_profiles():
+    """Get list of available profiles."""
+    profiles = get_available_profiles(DATA_DIR)
+    return jsonify({"profiles": profiles})
+
+
 @app.route("/api/snapshot", methods=["POST"])
 def api_snapshot():
     payload = request.get_json(force=True) or {}
     period = payload.get("period", "6M")
     question = payload.get("question", "")
+    profile_id = payload.get("profile", "james_thompson")
 
-    ts = load_time_series(DATA_DIR)
-    expenses_cfg = load_expenses(DATA_DIR)
+    ts = load_time_series(DATA_DIR, profile_id)
+    expenses_cfg = load_expenses(DATA_DIR, profile_id)
     snap = build_snapshot(period, ts, expenses_cfg)
 
     summary = build_summary(snap, question)
@@ -38,6 +46,7 @@ def api_simulate():
     payload = request.get_json(force=True) or {}
     period = payload.get("period", "6M")
     question = (payload.get("question") or "").strip()
+    profile_id = payload.get("profile", "james_thompson")
 
     if not question:
         return jsonify({
@@ -46,8 +55,8 @@ def api_simulate():
             "enabled": True
         })
 
-    ts = load_time_series(DATA_DIR)
-    expenses_cfg = load_expenses(DATA_DIR)
+    ts = load_time_series(DATA_DIR, profile_id)
+    expenses_cfg = load_expenses(DATA_DIR, profile_id)
     snap = build_snapshot(period, ts, expenses_cfg)
 
     facts = {

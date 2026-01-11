@@ -4,6 +4,8 @@
 // ============================================
 
 let period = "6M";
+let currentProfile = "james_thompson";
+let profiles = [];
 let flowChart = null;
 let wealthChart = null;
 let expensePieChart = null;
@@ -15,11 +17,11 @@ let currentSnap = null;
 // UTILITY FUNCTIONS
 // ============================================
 
-function eur(n) {
+function gbp(n) {
   try {
-    return "€" + Number(n).toLocaleString(undefined, { maximumFractionDigits: 0 });
+    return "£" + Number(n).toLocaleString(undefined, { maximumFractionDigits: 0 });
   } catch (e) {
-    return "€" + n;
+    return "£" + n;
   }
 }
 
@@ -224,8 +226,8 @@ function animateValue(element, start, end, duration) {
     if (!startTimestamp) startTimestamp = timestamp;
     const progress = Math.min((timestamp - startTimestamp) / duration, 1);
     const current = Math.floor(progress * (end - start) + start);
-    if (element.textContent.includes('€')) {
-      element.textContent = eur(current);
+    if (element.textContent.includes('£')) {
+      element.textContent = gbp(current);
     } else if (element.textContent.includes('%')) {
       element.textContent = `${current}%`;
     } else {
@@ -433,7 +435,7 @@ function renderExpenses(expenses, total) {
   
   const expTotalSubtitle = document.getElementById("expTotalSubtitle");
   if (expTotalSubtitle) {
-    expTotalSubtitle.textContent = `Total: ${eur(total)}`;
+    expTotalSubtitle.textContent = `Total: ${gbp(total)}`;
   }
   
   // Draw pie chart instead of list
@@ -508,7 +510,7 @@ function drawExpensePieChart(expenses, total) {
                   const value = data.datasets[0].data[i];
                   const pct = percentages[i];
                   return {
-                    text: `${label}: ${eur(value)} (${pct}%)`,
+                    text: `${label}: ${gbp(value)} (${pct}%)`,
                     fillStyle: data.datasets[0].backgroundColor[i],
                     strokeStyle: data.datasets[0].borderColor,
                     lineWidth: data.datasets[0].borderWidth,
@@ -534,7 +536,7 @@ function drawExpensePieChart(expenses, total) {
               const label = context.label || "";
               const value = context.parsed || 0;
               const pct = percentages[context.dataIndex] || 0;
-              return `${label}: ${eur(value)} (${pct}% of total)`;
+              return `${label}: ${gbp(value)} (${pct}% of total)`;
             },
           },
         },
@@ -548,9 +550,9 @@ function openExpenseDetailModal(expense, total) {
   if (!modal) return;
   
   document.getElementById("expenseDetailLabel").textContent = expense.label;
-  document.getElementById("expenseDetailAmount").textContent = eur(expense.monthly);
+  document.getElementById("expenseDetailAmount").textContent = gbp(expense.monthly);
   document.getElementById("expenseDetailPct").textContent = `${expense.pct}%`;
-  document.getElementById("expenseDetailMonthly").textContent = eur(expense.monthly);
+  document.getElementById("expenseDetailMonthly").textContent = gbp(expense.monthly);
   document.getElementById("expenseDetailShare").textContent = `${expense.pct}% of total`;
   
   modal.classList.add("active");
@@ -832,7 +834,7 @@ function drawFlow(flow) {
             color: CHART_COLORS.muted,
             font: { size: 10 },
             callback: function (value) {
-              return "€" + value.toLocaleString();
+              return "£" + value.toLocaleString();
             },
           },
           grid: { color: CHART_COLORS.grid, drawBorder: false },
@@ -1001,7 +1003,7 @@ async function loadSnapshot() {
     const res = await fetch("/api/snapshot", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ period, question: "" }),
+      body: JSON.stringify({ period, question: "", profile: currentProfile }),
     });
 
     const data = await res.json();
@@ -1051,7 +1053,7 @@ async function generateInsight() {
     const res = await fetch("/api/snapshot", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ period, question: q }),
+      body: JSON.stringify({ period, question: q, profile: currentProfile }),
     });
 
     const data = await res.json();
@@ -1079,7 +1081,7 @@ async function runSimulation() {
     const res = await fetch("/api/simulate", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ period, question: q }),
+      body: JSON.stringify({ period, question: q, profile: currentProfile }),
     });
 
     const payload = await res.json();
@@ -1230,11 +1232,54 @@ if (simulationReadMoreBtn) {
 }
 
 // ============================================
+// PROFILE MANAGEMENT
+// ============================================
+
+async function loadProfiles() {
+  try {
+    const res = await fetch("/api/profiles");
+    const data = await res.json();
+    profiles = data.profiles || [];
+    setupProfileSelector();
+  } catch (error) {
+    console.error("Error loading profiles:", error);
+    profiles = [];
+  }
+}
+
+function setupProfileSelector() {
+  const selector = document.getElementById("profileSelector");
+  if (!selector) return;
+  
+  // Clear existing options
+  selector.innerHTML = "";
+  
+  // Add profile options
+  profiles.forEach(profile => {
+    const option = document.createElement("option");
+    option.value = profile.id;
+    option.textContent = profile.name;
+    if (profile.id === currentProfile) {
+      option.selected = true;
+    }
+    selector.appendChild(option);
+  });
+  
+  // Add event listener
+  selector.addEventListener("change", async (e) => {
+    currentProfile = e.target.value;
+    await loadSnapshot();
+  });
+}
+
+// ============================================
 // INITIALIZATION
 // ============================================
 
 document.addEventListener('DOMContentLoaded', function() {
   addCardInteractivity();
   setupPeriodSelector();
-  loadSnapshot();
+  loadProfiles().then(() => {
+    loadSnapshot();
+  });
 });

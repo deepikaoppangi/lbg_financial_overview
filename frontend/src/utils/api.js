@@ -1,6 +1,8 @@
 import axios from 'axios';
 
-const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:5001';
+// In development we prefer a relative URL so the CRA dev server proxy (package.json) forwards to the backend.
+// In production, set REACT_APP_API_URL to the full backend URL.
+const API_BASE_URL = process.env.REACT_APP_API_URL || '';
 
 const api = axios.create({
   baseURL: API_BASE_URL,

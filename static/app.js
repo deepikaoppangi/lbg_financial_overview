@@ -574,7 +574,13 @@ function renderSummary(summary) {
   if (headlineEl) {
     let headline = summary.headline || "";
     headline = headline.replace(/#\w+/g, "").trim();
-    headlineEl.textContent = headline;
+    // Hide headline if it matches the modal title to avoid duplication
+    if (headline === "Financial Insight Summary") {
+      headlineEl.style.display = "none";
+    } else {
+      headlineEl.style.display = "block";
+      headlineEl.textContent = headline;
+    }
   }
   
   if (bulletsEl) {
@@ -638,7 +644,8 @@ function renderSimulation(payload) {
 
   if (headingEl) {
     let heading = payload.heading || "";
-    heading = heading.replace(/#\w+/g, "").trim();
+    // Remove all # characters (markdown heading syntax)
+    heading = heading.replace(/#+/g, "").trim();
     headingEl.textContent = heading;
   }
   

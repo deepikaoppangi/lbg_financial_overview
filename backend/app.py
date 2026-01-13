@@ -2,7 +2,7 @@ from dotenv import load_dotenv
 load_dotenv()
 
 import os
-from flask import Flask, request, jsonify, render_template
+from flask import Flask, request, jsonify
 from flask_cors import CORS
 from pathlib import Path
 
@@ -11,15 +11,9 @@ from services.finance_engine import build_snapshot
 from services.summary_engine import build_summary
 from services.llm_service import llm_simulation
 
-app = Flask(__name__, template_folder="templates", static_folder="static")
+app = Flask(__name__)
 CORS(app)  # Enable CORS for React frontend
-DATA_DIR = Path("data")
-
-
-@app.route("/")
-def index():
-    """Serve the main HTML page."""
-    return render_template("index.html")
+DATA_DIR = Path(__file__).parent / "data"
 
 
 @app.route("/api/profiles", methods=["GET"])

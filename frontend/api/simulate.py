@@ -12,6 +12,13 @@ DATA_DIR = Path(__file__).resolve().parents[1] / "data"
 
 
 class handler(BaseHTTPRequestHandler):
+    def do_OPTIONS(self):
+        self.send_response(200)
+        self.send_header("Access-Control-Allow-Origin", "*")
+        self.send_header("Access-Control-Allow-Methods", "POST, OPTIONS")
+        self.send_header("Access-Control-Allow-Headers", "Content-Type")
+        self.end_headers()
+    
     def do_POST(self):
         try:
             length = int(self.headers.get("content-length", "0"))
@@ -23,17 +30,20 @@ class handler(BaseHTTPRequestHandler):
             profile_id = payload.get("profile", "james_thompson")
 
             if not question:
-                body = json.dumps({
-                    "heading": "",
-                    "lines": ["Type a scenario question first (e.g. 'retire at 65')."],
-                    "enabled": True
-                }).encode("utf-8")
-                self.send_response(200)
-                self.send_header("Content-Type", "application/json")
-                self.send_header("Content-Length", str(len(body)))
-                self.end_headers()
-                self.wfile.write(body)
-                return
+            body = json.dumps({
+                "heading": "",
+                "lines": ["Type a scenario question first (e.g. 'retire at 65')."],
+                "enabled": True
+            }).encode("utf-8")
+            self.send_response(200)
+            self.send_header("Content-Type", "application/json")
+            self.send_header("Access-Control-Allow-Origin", "*")
+            self.send_header("Access-Control-Allow-Methods", "POST, OPTIONS")
+            self.send_header("Access-Control-Allow-Headers", "Content-Type")
+            self.send_header("Content-Length", str(len(body)))
+            self.end_headers()
+            self.wfile.write(body)
+            return
 
             ts = load_time_series(DATA_DIR, profile_id)
             expenses_cfg = load_expenses(DATA_DIR, profile_id)
@@ -79,6 +89,9 @@ class handler(BaseHTTPRequestHandler):
             body = json.dumps(result).encode("utf-8")
             self.send_response(200)
             self.send_header("Content-Type", "application/json")
+            self.send_header("Access-Control-Allow-Origin", "*")
+            self.send_header("Access-Control-Allow-Methods", "POST, OPTIONS")
+            self.send_header("Access-Control-Allow-Headers", "Content-Type")
             self.send_header("Content-Length", str(len(body)))
             self.end_headers()
             self.wfile.write(body)
@@ -87,6 +100,9 @@ class handler(BaseHTTPRequestHandler):
             body = json.dumps(error).encode("utf-8")
             self.send_response(500)
             self.send_header("Content-Type", "application/json")
+            self.send_header("Access-Control-Allow-Origin", "*")
+            self.send_header("Access-Control-Allow-Methods", "POST, OPTIONS")
+            self.send_header("Access-Control-Allow-Headers", "Content-Type")
             self.send_header("Content-Length", str(len(body)))
             self.end_headers()
             self.wfile.write(body)

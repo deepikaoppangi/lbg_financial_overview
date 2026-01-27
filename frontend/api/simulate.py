@@ -1,20 +1,14 @@
 import json
 import os
-import sys
 from pathlib import Path
 from http.server import BaseHTTPRequestHandler
 
-
-BACKEND_ROOT = Path(__file__).resolve().parents[2] / "backend"
-if str(BACKEND_ROOT) not in sys.path:
-    sys.path.append(str(BACKEND_ROOT))
-
-from services.data_service import load_time_series, load_expenses  # type: ignore  # noqa: E402
-from services.finance_engine import build_snapshot  # type: ignore  # noqa: E402
-from services.llm_service import llm_simulation  # type: ignore  # noqa: E402
+from server_backend.data_service import load_time_series, load_expenses  # type: ignore
+from server_backend.finance_engine import build_snapshot  # type: ignore
+from server_backend.llm_service import llm_simulation  # type: ignore
 
 
-DATA_DIR = BACKEND_ROOT / "data"
+DATA_DIR = Path(__file__).resolve().parents[1] / "data"
 
 
 class handler(BaseHTTPRequestHandler):

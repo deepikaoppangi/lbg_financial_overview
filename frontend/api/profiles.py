@@ -1,18 +1,11 @@
 import json
-import sys
 from pathlib import Path
 from http.server import BaseHTTPRequestHandler
 
-
-# Make backend services importable (../backend/services)
-BACKEND_ROOT = Path(__file__).resolve().parents[2] / "backend"
-if str(BACKEND_ROOT) not in sys.path:
-    sys.path.append(str(BACKEND_ROOT))
-
-from services.data_service import get_available_profiles  # type: ignore  # noqa: E402
+from server_backend.data_service import get_available_profiles  # type: ignore
 
 
-DATA_DIR = BACKEND_ROOT / "data"
+DATA_DIR = Path(__file__).resolve().parents[1] / "data"
 
 
 class handler(BaseHTTPRequestHandler):

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import Header from './components/Header';
 import Dashboard from './components/Dashboard';
 import { fetchProfiles, fetchSnapshot } from './utils/api';
@@ -9,16 +9,6 @@ function App() {
   const [period, setPeriod] = useState('6M');
   const [snapshot, setSnapshot] = useState(null);
   const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    loadProfiles();
-  }, []);
-
-  useEffect(() => {
-    if (profiles.length > 0) {
-      loadSnapshot();
-    }
-  }, [currentProfile, period, profiles]);
 
   const loadProfiles = async () => {
     try {
@@ -32,7 +22,7 @@ function App() {
     }
   };
 
-  const loadSnapshot = async () => {
+  const loadSnapshot = useCallback(async () => {
     setLoading(true);
     try {
       const data = await fetchSnapshot(period, '', currentProfile);
@@ -42,7 +32,17 @@ function App() {
     } finally {
       setLoading(false);
     }
-  };
+  }, [period, currentProfile]);
+
+  useEffect(() => {
+    loadProfiles();
+  }, []);
+
+  useEffect(() => {
+    if (profiles.length > 0) {
+      loadSnapshot();
+    }
+  }, [currentProfile, period, profiles, loadSnapshot]);
 
   const handleProfileChange = (profileId) => {
     setCurrentProfile(profileId);

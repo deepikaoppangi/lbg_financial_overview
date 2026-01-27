@@ -8,7 +8,6 @@ const FinancialMetrics = ({ snapshot }) => {
   if (!snapshot) return null;
 
   const salary = snapshot.salary_monthly || 0;
-  const expenses = snapshot.monthly_expense_total || 0;
   const savings = snapshot.savings_est_monthly || 0;
 
   const savingsRate = salary > 0 ? Math.round((savings / salary) * 100) : 0;

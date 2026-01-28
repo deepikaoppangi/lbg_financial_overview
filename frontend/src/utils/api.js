@@ -42,12 +42,49 @@ export const fetchSimulation = async (period, question, profile) => {
 
   const pdata = await loadProfile(profile);
   const snap = buildSnapshot(period, pdata.time_series, pdata.expenses);
-  const heading = `Scenario: ${q}`;
-  const lines = [
-    `Period: ${snap.period}`,
-    `Income £${Math.round(snap.salary_monthly)}/month | Expenses £${Math.round(snap.monthly_expense_total)}/month | Savings £${Math.round(snap.savings_est_monthly)}/month`,
-    `Resilience ${Math.round(snap.resilience)}% | Liquidity ${Math.round(snap.liquidity)}%`,
-    "This is a frontend-only POC response (no backend call).",
-  ];
-  return { heading, lines, enabled: true };
+
+  try {
+    const resp = await fetch("/.netlify/functions/simulate", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        period,
+        question: q,
+        snapshot: snap,
+      }),
+    });
+
+    if (!resp.ok) {
+      console.error("Simulation API error", resp.status);
+      throw new Error(`Simulation failed: ${resp.status}`);
+    }
+
+    const data = await resp.json();
+    if (data && data.heading && Array.isArray(data.lines)) {
+      return {
+        heading: data.heading,
+        lines: data.lines,
+        enabled: true,
+      };
+    }
+
+    throw new Error("Malformed simulation response");
+  } catch (err) {
+    console.error("Simulation call failed, falling back", err);
+
+    const heading = `Scenario: ${q}`;
+    const lines = [
+      `Period: ${snap.period}`,
+      `Income £${Math.round(snap.salary_monthly)}/month | Expenses £${Math.round(
+        snap.monthly_expense_total
+      )}/month | Savings £${Math.round(snap.savings_est_monthly)}/month`,
+      `Resilience ${Math.round(snap.resilience)}% | Liquidity ${Math.round(
+        snap.liquidity
+      )}%`,
+      "Simulation service is currently unavailable. Showing basic snapshot only.",
+    ];
+    return { heading, lines, enabled: true };
+  }
 };

@@ -16,12 +16,19 @@ npm start
 
 The app will run on http://localhost:3000
 
-## Backend
+## Data / Backend
 
-Make sure the Flask backend is running on http://localhost:5001
+This project runs in **frontend-only mode**:
+
+- Profile data is served from `public/data/profiles/*.json`
+- Snapshot + summaries are computed in-browser (no backend, no API)
 
 ## Build for Production
 
 ```bash
 npm run build
 ```
+
+## Deploy to Netlify
+
+This repo is configured for Netlify using `../netlify.toml` (base dir `frontend/`).

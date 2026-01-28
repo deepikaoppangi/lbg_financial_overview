@@ -1,6 +1,6 @@
 # Lloyds Financial Wellbeing Dashboard
 
-A modern financial dashboard application with React frontend and Flask backend.
+A modern financial dashboard application running as a **static React frontend** (no backend).
 
 ## Project Structure
 
@@ -11,33 +11,10 @@ A modern financial dashboard application with React frontend and Flask backend.
 │   │   ├── utils/
 │   │   └── App.js
 │   └── package.json
-├── backend/           # Flask API
-│   ├── services/
-│   ├── data/
-│   └── app.py
 └── README.md
 ```
 
 ## Getting Started
-
-### Backend Setup
-
-1. Navigate to backend directory:
-```bash
-cd backend
-```
-
-2. Install Python dependencies:
-```bash
-pip install -r requirements.txt
-```
-
-3. Run the Flask server:
-```bash
-python app.py
-```
-
-The backend will run on http://localhost:5001
 
 ### Frontend Setup
 
@@ -58,6 +35,10 @@ npm start
 
 The frontend will run on http://localhost:3000
 
+## Deploy to Netlify (recommended)
+
+This repo includes `netlify.toml` configured to build from `frontend/` and publish the CRA build output.
+
 ## Features
 
 - Multi-profile support (James Thompson, Sarah Mitchell, David Williams)
@@ -70,5 +51,4 @@ The frontend will run on http://localhost:3000
 ## Technology Stack
 
 - **Frontend**: React 18, Chart.js, Axios
-- **Backend**: Flask, Python
 - **Styling**: Modern CSS with CSS Variables

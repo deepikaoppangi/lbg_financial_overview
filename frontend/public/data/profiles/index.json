@@ -1,0 +1,8 @@
+{
+  "profiles": [
+    { "id": "james_thompson", "name": "James Thompson" },
+    { "id": "david_williams", "name": "David Williams" },
+    { "id": "sarah_mitchell", "name": "Sarah Mitchell" }
+  ]
+}
+

@@ -39,6 +39,14 @@ The frontend will run on http://localhost:3000
 
 This repo includes `netlify.toml` configured to build from `frontend/` and publish the CRA build output.
 
+### OpenAI key (Scenario Planning)
+
+To enable AI-powered scenario output on Netlify, add this environment variable in Netlify site settings:
+
+- `OPENAI_API_KEY`
+
+Do **not** store API keys in `netlify.toml` or commit them to Git.
+
 ## Features
 
 - Multi-profile support (James Thompson, Sarah Mitchell, David Williams)

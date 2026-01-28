@@ -32,3 +32,11 @@ npm run build
 ## Deploy to Netlify
 
 This repo is configured for Netlify using `../netlify.toml` (base dir `frontend/`).
+
+### Configure OpenAI (for Scenario Planning)
+
+To enable AI-powered scenario responses on Netlify, set this environment variable in Netlify:
+
+- `OPENAI_API_KEY` = your OpenAI API key
+
+Security note: **do not** put API keys into `netlify.toml` or commit them to Git.
